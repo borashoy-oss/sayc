@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Математикалық Бәйге: 8 Тапсырма</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #2c3e50;
+            margin: 0;
+            padding: 10px;
+            height: 100vh;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ecf0f1;
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Негізгі тақта */
+        .game-board {
+            display: flex;
+            flex: 1;
+            gap: 10px;
+            height: 100%;
+        }
+
+        /* Топтар бағанасы */
+        .team-section {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .team-header {
+            text-align: center;
+            color: white;
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            padding: 8px;
+            border-radius: 6px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+
+        .team-1 .team-header { background: #2980b9; }
+        .team-2 .team-header { background: #c0392b; }
+
+        /* Тапсырмалар торы (2x2) */
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Екі бағана */
+            grid-template-rows: 1fr 1fr;    /* Екі қатар */
+            gap: 15px;
+            flex: 1;
+        }
+
+        /* Карточка стилі */
+        .card {
+            background: #ecf0f1;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            font-weight: bold;
+            color: #2c3e50;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+            position: relative;
+            border: 2px solid #bdc3c7;
+            min-height: 80px; /* Биіктікті бекіту */
+        }
+
+        /* Тапсырма (Drop Zone) */
+        .task-card {
+            background: #fff;
+            border-style: dashed;
+            color: #7f8c8d;
+            font-size: 16px;
+        }
+
+        .task-card.drag-over {
+            background: #d5f5e3;
+            border-color: #2ecc71;
+            transform: scale(1.02);
+        }
+
+        .task-card.solved {
+            background: #2ecc71;
+            color: white;
+            border-style: solid;
+            border-color: #27ae60;
+            font-size: 18px;
+            text-align: center;
+            line-height: 1.4;
+        }
+
+        /* Ортаңғы панель */
+        .answers-panel {
+            flex: 0 0 260px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            z-index: 5;
+        }
+
+        .panel-header {
+            text-align: center;
+            font-weight: bold;
+            color: #7f8c8d;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+        }
+
+        .answers-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        /* Жауап элементі */
+        .answer-item {
+            background: #f1c40f;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+            cursor: grab;
+            font-weight: bold;
+            border: 1px solid #f39c12;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+
+        .answer-item:hover {
+            transform: scale(1.02);
+            background: #f4d03f;
+        }
+
+        /* Адаптивтілік */
+        @media (max-width: 800px) {
+            .game-board { flex-direction: column; overflow-y: auto; }
+            .answers-panel { flex: none; flex-direction: row; flex-wrap: wrap; }
+            .answers-list { flex-direction: row; flex-wrap: wrap; width: 100%; justify-content: center; }
+            .tasks-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Рационал теңсіздіктер (8 Тапсырма)</h1>
+
+    <div class="game-board">
+        <!-- 1-ші Топ -->
+        <div class="team-section team-1">
+            <div class="team-header">1-ші Топ</div>
+            <div class="tasks-grid" id="grid-1">
+                <!-- 4 тапсырма JS арқылы түседі -->
+            </div>
+        </div>
+
+        <!-- Жауаптар -->
+        <div class="answers-panel">
+            <div class="panel-header">Жауаптар</div>
+            <div class="answers-list" id="answers-source">
+                <!-- 8 жауап JS арқылы түседі -->
+            </div>
+        </div>
+
+        <!-- 2-ші Топ -->
+        <div class="team-section team-2">
+            <div class="team-header">2-ші Топ</div>
+            <div class="tasks-grid" id="grid-2">
+                <!-- 4 тапсырма JS арқылы түседі -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 8 Тапсырма (4-еуі әр топқа)
+        const tasks = [
+            // 1-Топ
+            { id: 't1', q: '(x-3)(x+5) > 0', a: '(-∞; -5) U (3; +∞)', team: 1 },
+            { id: 't2', q: '(x+2)(x-4) < 0', a: '(-2; 4)', team: 1 },
+            { id: 't3', q: 'x² - 9 ≥ 0', a: '(-∞; -3] U [3; +∞)', team: 1 },
+            { id: 't4', q: '(x+1)(x-1) ≤ 0', a: '[-1; 1]', team: 1 },
+
+            // 2-Топ
+            { id: 't5', q: '(x-2)(x+6) > 0', a: '(-∞; -6) U (2; +∞)', team: 2 },
+            { id: 't6', q: '(x+3)(x-5) < 0', a: '(-3; 5)', team: 2 },
+            { id: 't7', q: 'x² - 16 ≤ 0', a: '[-4; 4]', team: 2 },
+            { id: 't8', q: '(x-7)(x+1) ≥ 0', a: '(-∞; -1] U [7; +∞)', team: 2 }
+        ];
+
+        function initGame() {
+            const source = document.getElementById('answers-source');
+            
+            // Жауаптарды араластыру
+            const shuffled = [...tasks].sort(() => 0.5 - Math.random());
+
+            shuffled.forEach(task => {
+                // 1. Жауапты жасау
+                const answerEl = document.createElement('div');
+                answerEl.className = 'answer-item';
+                answerEl.innerText = task.a;
+                answerEl.draggable = true;
+                answerEl.id = task.id;
+
+                answerEl.addEventListener('dragstart', (e) => {
+                    e.dataTransfer.setData('id', task.id);
+                    e.dataTransfer.setData('text', task.a);
+                    answerEl.style.opacity = '0.4';
+                });
+
+                answerEl.addEventListener('dragend', () => {
+                    answerEl.style.opacity = '1';
+                });
+
+                source.appendChild(answerEl);
+
+                // 2. Тапсырманы жасау
+                const taskEl = document.createElement('div');
+                taskEl.className = 'card task-card';
+                taskEl.innerText = task.q;
+                
+                // Drop зонасы
+                taskEl.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    taskEl.classList.add('drag-over');
+                });
+
+                taskEl.addEventListener('dragleave', () => {
+                    taskEl.classList.remove('drag-over');
+                });
+
+                taskEl.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    taskEl.classList.remove('drag-over');
+                    
+                    const droppedId = e.dataTransfer.getData('id');
+                    const droppedText = e.dataTransfer.getData('text');
+
+                    if (droppedId === task.id) {
+                        // Дұрыс
+                        taskEl.classList.add('solved');
+                        taskEl.innerHTML = `${task.q}<br><small>➜ ${task.a}</small>`;
+                        
+                        // Жауапты жою
+                        const original = document.getElementById(droppedId);
+                        if(original) original.remove();
+                    } else {
+                        // Қате
+                        taskEl.style.backgroundColor = '#ffcccc';
+                        setTimeout(() => taskEl.style.backgroundColor = '#fff', 300);
+                    }
+                });
+
+                // Топқа бөлу
+                const targetGrid = task.team === 1 ? document.getElementById('grid-1') : document.getElementById('grid-2');
+                targetGrid.appendChild(taskEl);
+            });
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
